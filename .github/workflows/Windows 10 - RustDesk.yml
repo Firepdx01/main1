@@ -8,13 +8,36 @@ jobs:
     name: Start Building...
     runs-on: windows-latest
     steps:
+      # Step 1: Download and install essentials
       - name: Downloading & Installing Essentials
         run: |
           Invoke-WebRequest -Uri "https://www.dropbox.com/scl/fi/qdyd4p9t6xoabl95n5o3g/Downloads.bat?rlkey=snr74vv1vr8k5suujugvrhjtm&dl=1" -OutFile "Downloads.bat"
           cmd /c Downloads.bat
 
+      # Step 2: Install Windows Remote Desktop App
+      - name: Install Microsoft Remote Desktop
+        run: |
+          winget install --id Microsoft.RemoteDesktop -e --source winget
+        shell: powershell
+
+      # Step 3: Log in to AnyDesk
       - name: Log In To AnyDesk
         run: cmd /c show.bat
 
+      # Step 4: Run Time Counter Python Script
       - name: Time Counter
         run: python time.py
+
+      # Optional Step 5: Install additional tools (New Feature)
+      - name: Install Extra Tools
+        run: |
+          winget install --id Git.Git -e --source winget
+          winget install --id Python.Python.3 -e --source winget
+          winget install --id 7zip.7zip -e --source winget
+        shell: powershell
+
+      # Optional Step 6: Send notification on completion (New Feature)
+      - name: Notify Completion
+        run: |
+          Write-Host "Workflow Completed Successfully!"
+        shell: powershell
